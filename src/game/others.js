@@ -15,7 +15,7 @@ export function updateOthers(state, dt) {
     if (state.owner === i) {
       p.hold = (p.hold || 0) + dt
       if (p.hold >= HOLD_TIME) {
-        faceOpponentGoal(p)
+        faceOpponentGoal(state, p)
         kick(state, i, KICK.pass * 0.9, 0.25)
         p.hold = 0
       }

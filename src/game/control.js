@@ -42,8 +42,8 @@ export function kick(state, playerIndex, speed, spread = 0) {
 }
 
 // Richtung zum gegnerischen Tor, für Befreiungsschläge der ungesteuerten Spieler.
-export function faceOpponentGoal(p) {
-  const gx = p.team === 0 ? PITCH.x + PITCH.w : PITCH.x
+export function faceOpponentGoal(state, p) {
+  const gx = state.attack[p.team] === 1 ? PITCH.x + PITCH.w : PITCH.x
   const gy = PITCH.y + PITCH.h / 2
   const len = Math.hypot(gx - p.x, gy - p.y) || 1
   p.dirX = (gx - p.x) / len

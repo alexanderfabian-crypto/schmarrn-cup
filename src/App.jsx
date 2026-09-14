@@ -4,6 +4,7 @@ import Player from './components/Player.jsx'
 import Ball from './components/Ball.jsx'
 import { useGame } from './game/useGame.js'
 import { padDebug } from './game/input.js'
+import { matchSeconds, formatClock } from './game/match.js'
 
 const DEBUG = typeof window !== 'undefined' && window.location.search.includes('debug')
 
@@ -17,7 +18,7 @@ export default function App() {
       ))}
       <Ball ball={game.ball} />
       <div className="score">
-        {game.score[0]} : {game.score[1]}
+        {game.score[0]} : {game.score[1]} · {game.match.half}. HZ · {formatClock(matchSeconds(game.match))} · {game.match.phase}
       </div>
       <div className="debug">
         {game.time.toFixed(1)} s

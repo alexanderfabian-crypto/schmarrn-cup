@@ -29,3 +29,10 @@ export const KICK = {
   shotSpread: 0.05, // Streuung des Schusses in Radiant
   cooldown: 0.3, // Sekunden, in denen der Schütze den Ball nicht zurückholt
 }
+
+export const MATCH = {
+  halfLength: 180, // Sekunden je Halbzeit
+  halftimeBreak: 15,
+  celebration: 5, // Sekunden Jubel nach einem Tor
+  clockRunsDuringCelebration: true, // Uhr läuft beim Jubel weiter, Gesamtdauer bleibt exakt
+}

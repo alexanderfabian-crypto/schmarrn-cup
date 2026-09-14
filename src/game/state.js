@@ -1,24 +1,23 @@
 import teams from '../../content/teams.json'
-import { PITCH } from './constants.js'
+import { PITCH, KICK } from './constants.js'
 import { FORMATION, KICKOFF, KICKOFF_WAIT } from './formation.js'
 import { createBall, moveBall } from './ball.js'
 import { readInputs } from './input.js'
 import { movePlayer, pickControlled } from './players.js'
 import { updatePossession, kick } from './control.js'
 import { updateOthers } from './others.js'
-import { KICK } from './constants.js'
 import { checkGoal } from './goal.js'
+import { createMatch, updateMatch, goalScored } from './match.js'
 
-// Mannschaft 0 (gelb) spielt von links nach rechts, Mannschaft 1 (blau) umgekehrt.
 export function createState() {
   const players = teams.teams.flatMap((team, t) =>
-    team.players.map((p, i) => ({
+    team.players.map((p) => ({
       team: t,
       number: p.number,
       name: p.nickname,
       x: 0,
       y: 0,
-      dirX: t === 0 ? 1 : -1,
+      dirX: 1,
       dirY: 0,
       moving: false,
       homeX: 0,
@@ -31,37 +30,50 @@ export function createState() {
     players,
     ball: createBall(),
     score: [0, 0],
+    match: createMatch(),
+    // Spielrichtung je Mannschaft entlang x: 1 nach rechts, -1 nach links.
+    // Gelb beginnt von links nach rechts, nach der Halbzeit wird getauscht.
+    attack: [1, -1],
     controlled: [-1, -1], // Index des gesteuerten Spielers je Mannschaft
     owner: -1, // Spieler, der den Ball führt
     lastKicker: -1,
     kickCooldown: 0,
     lastGoal: null,
     inputs: [],
+    resetKickoff,
   }
   resetKickoff(state, 0)
   return state
 }
 
+// Rechnet einen Feldanteil vom eigenen Tor aus in eine Bühnenkoordinate um.
+export function pitchX(fx, attackDir) {
+  return PITCH.x + (attackDir === 1 ? fx : 1 - fx) * PITCH.w
+}
+
+export function pitchY(fy) {
+  return PITCH.y + fy * PITCH.h
+}
+
 // Stellt alle Spieler auf Grundposition, die anstoßende Mannschaft an den Ball.
 export function resetKickoff(state, kickoffTeam) {
-  const kick = [0, 0]
+  const kickIndex = [0, 0]
   state.players.forEach((p, idx) => {
     const i = idx % 11
+    const dir = state.attack[p.team]
     let [fx, fy] = FORMATION[i]
     if (i >= 9) {
       const spots = p.team === kickoffTeam ? KICKOFF : KICKOFF_WAIT
-      ;[fx, fy] = spots[kick[p.team]++]
+      ;[fx, fy] = spots[kickIndex[p.team]++]
     }
-    if (p.team === 1) fx = 1 - fx
-    p.x = PITCH.x + fx * PITCH.w
-    p.y = PITCH.y + fy * PITCH.h
+    p.x = pitchX(fx, dir)
+    p.y = pitchY(fy)
     // Grundposition im Spiel ist die normale Formation, nicht der Anstoßplatz.
-    let [hx, hy] = FORMATION[i]
-    if (p.team === 1) hx = 1 - hx
-    p.homeX = PITCH.x + hx * PITCH.w
-    p.homeY = PITCH.y + hy * PITCH.h
+    const [hx, hy] = FORMATION[i]
+    p.homeX = pitchX(hx, dir)
+    p.homeY = pitchY(hy)
     p.hold = 0
-    p.dirX = p.team === 0 ? 1 : -1
+    p.dirX = dir
     p.dirY = 0
     p.moving = false
   })
@@ -75,6 +87,8 @@ export function resetKickoff(state, kickoffTeam) {
 export function step(state, dt) {
   state.time += dt
   state.inputs = readInputs()
+
+  if (!updateMatch(state, dt)) return
 
   // Jede Mannschaft hat einen gesteuerten Spieler, Pad 1 gelb, Pad 2 blau.
   for (const team of [0, 1]) {
@@ -97,12 +111,7 @@ export function step(state, dt) {
 
   moveBall(state.ball, dt)
 
-  // Etappe 1: nach einem Tor sofort Wiederanstoß durch die Mannschaft, die
-  // das Tor kassiert hat. Jubel und Uhr folgen in späteren Etappen.
-  const scorer = checkGoal(state.ball)
-  if (scorer >= 0) {
-    state.score[scorer] += 1
-    state.lastGoal = { team: scorer, time: state.time }
-    resetKickoff(state, 1 - scorer)
-  }
+  // Ball im rechten Tor zählt für die Mannschaft, die nach rechts spielt.
+  const side = checkGoal(state.ball)
+  if (side !== 0) goalScored(state, state.attack[0] === side ? 0 : 1)
 }

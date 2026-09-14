@@ -4,7 +4,7 @@
 
 // 8BitDo SN30 Pro im Standard-Mapping (X-Input): physisch B = Index 0,
 // physisch A = Index 1, R = Index 5, Steuerkreuz = Index 12 bis 15.
-export const PAD_BUTTONS = { pass: 0, shoot: 1, sprint: 5, up: 12, down: 13, left: 14, right: 15 }
+export const PAD_BUTTONS = { pass: 0, shoot: 1, sprint: 5, start: 9, up: 12, down: 13, left: 14, right: 15 }
 
 // Tastatur für Tests ohne Pads. Spieler 1: Pfeiltasten, X passen, C schießen,
 // Shift sprinten. Spieler 2: WASD, Q passen, E schießen, Tab sprinten.
@@ -18,6 +18,7 @@ const KEYS = [
     KeyC: 'shoot',
     ShiftLeft: 'sprint',
     ShiftRight: 'sprint',
+    Enter: 'start',
   },
   {
     KeyW: 'up',
@@ -27,6 +28,7 @@ const KEYS = [
     KeyQ: 'pass',
     KeyE: 'shoot',
     Tab: 'sprint',
+    Enter: 'start',
   },
 ]
 
@@ -50,7 +52,7 @@ if (typeof window !== 'undefined') {
 }
 
 function emptyInput() {
-  return { dx: 0, dy: 0, pass: false, shoot: false, sprint: false, active: false }
+  return { dx: 0, dy: 0, pass: false, shoot: false, sprint: false, start: false, active: false }
 }
 
 function readPad(pad) {
@@ -63,6 +65,7 @@ function readPad(pad) {
     pass: b(PAD_BUTTONS.pass),
     shoot: b(PAD_BUTTONS.shoot),
     sprint: b(PAD_BUTTONS.sprint),
+    start: b(PAD_BUTTONS.start),
   }
   // Manche Modi melden das Steuerkreuz als Achsen statt als Tasten.
   if (!raw.up && !raw.down && !raw.left && !raw.right && pad.axes.length >= 2) {
@@ -81,7 +84,8 @@ function toInput(raw) {
   input.pass = Boolean(raw.pass)
   input.shoot = Boolean(raw.shoot)
   input.sprint = Boolean(raw.sprint)
-  input.active = input.dx !== 0 || input.dy !== 0 || input.pass || input.shoot || input.sprint
+  input.start = Boolean(raw.start)
+  input.active = input.dx !== 0 || input.dy !== 0 || input.pass || input.shoot || input.sprint || input.start
   return input
 }
 
@@ -100,6 +104,7 @@ export function readInputs() {
       input.pass ||= kb.pass
       input.shoot ||= kb.shoot
       input.sprint ||= kb.sprint
+      input.start ||= kb.start
       input.active = true
     }
     return input
@@ -107,7 +112,8 @@ export function readInputs() {
   inputs.forEach((input, i) => {
     input.passPressed = input.pass && !prev[i].pass
     input.shootPressed = input.shoot && !prev[i].shoot
-    prev[i] = { pass: input.pass, shoot: input.shoot }
+    input.startPressed = input.start && !prev[i].start
+    prev[i] = { pass: input.pass, shoot: input.shoot, start: input.start }
   })
   return inputs
 }
