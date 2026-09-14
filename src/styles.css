@@ -129,3 +129,16 @@ body,
   box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.3);
   will-change: transform;
 }
+
+/* Vorläufiger Spielstand, die Anzeigetafel kommt in Etappe 2. */
+.score {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 44px;
+  font-weight: 800;
+  text-shadow: 2px 3px 0 rgba(0, 0, 0, 0.4);
+}

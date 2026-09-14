@@ -20,3 +20,12 @@ export const PLAYER = {
   speed: 260, // px pro Sekunde
   sprint: 390,
 }
+
+export const KICK = {
+  controlRadius: 26, // Abstand, ab dem ein Spieler den Ball übernimmt
+  carry: 20, // Abstand des Balls vor dem Spieler beim Dribbeln
+  pass: 750, // Ballgeschwindigkeit in px/s
+  shot: 1350,
+  shotSpread: 0.05, // Streuung des Schusses in Radiant
+  cooldown: 0.3, // Sekunden, in denen der Schütze den Ball nicht zurückholt
+}

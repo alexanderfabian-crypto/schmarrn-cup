@@ -1,7 +1,7 @@
 import { PLAYER, PITCH } from './constants.js'
 
 // Bewegt einen Spieler in Richtung (dx, dy) und merkt sich die Blickrichtung.
-export function movePlayer(p, dx, dy, sprint, dt) {
+export function movePlayer(p, dx, dy, sprint, dt, maxSpeed) {
   if (dx === 0 && dy === 0) {
     p.moving = false
     return
@@ -9,7 +9,8 @@ export function movePlayer(p, dx, dy, sprint, dt) {
   const len = Math.hypot(dx, dy)
   const nx = dx / len
   const ny = dy / len
-  const speed = sprint ? PLAYER.sprint : PLAYER.speed
+  let speed = sprint ? PLAYER.sprint : PLAYER.speed
+  if (maxSpeed) speed = Math.min(speed, maxSpeed)
   p.x += nx * speed * dt
   p.y += ny * speed * dt
   p.dirX = nx
@@ -31,7 +32,7 @@ export function dist(a, b) {
 export function pickControlled(state, team) {
   const current = state.controlled[team]
   let best = current
-  let bestDist = current >= 0 ? dist(state.players[current], state.ball) - 40 : Infinity
+  let bestDist = current >= 0 ? dist(state.players[current], state.ball) - 60 : Infinity
   state.players.forEach((p, i) => {
     if (p.team !== team) return
     const d = dist(p, state.ball)
