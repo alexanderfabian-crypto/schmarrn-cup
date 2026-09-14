@@ -6,7 +6,10 @@ import { STEP } from './constants.js'
 // Der Spielzustand lebt außerhalb von React; React zeichnet ihn nur.
 export function useGame() {
   const stateRef = useRef(null)
-  if (stateRef.current === null) stateRef.current = createState()
+  if (stateRef.current === null) {
+    stateRef.current = createState()
+    window.__game = stateRef.current // zum Prüfen in der Browserkonsole
+  }
   const [, setFrame] = useState(0)
 
   useEffect(() => {

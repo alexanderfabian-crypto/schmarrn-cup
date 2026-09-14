@@ -2,6 +2,8 @@ import teams from '../../content/teams.json'
 import { PITCH } from './constants.js'
 import { FORMATION, KICKOFF, KICKOFF_WAIT } from './formation.js'
 import { createBall, moveBall } from './ball.js'
+import { readInputs } from './input.js'
+import { movePlayer, pickControlled } from './players.js'
 
 // Mannschaft 0 (gelb) spielt von links nach rechts, Mannschaft 1 (blau) umgekehrt.
 export function createState() {
@@ -22,6 +24,8 @@ export function createState() {
     players,
     ball: createBall(),
     score: [0, 0],
+    controlled: [-1, -1], // Index des gesteuerten Spielers je Mannschaft
+    inputs: [],
   }
   resetKickoff(state, 0)
   return state
@@ -49,5 +53,13 @@ export function resetKickoff(state, kickoffTeam) {
 
 export function step(state, dt) {
   state.time += dt
+  state.inputs = readInputs()
+
+  // Etappe 1: nur Mannschaft 0 ist steuerbar.
+  pickControlled(state, 0)
+  const input = state.inputs[0]
+  const me = state.players[state.controlled[0]]
+  movePlayer(me, input.dx, input.dy, input.sprint, dt)
+
   moveBall(state.ball, dt)
 }

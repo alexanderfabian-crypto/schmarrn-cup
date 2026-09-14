@@ -14,3 +14,9 @@ export const BALL = {
   friction: 0.9, // exponentieller Abbau der Geschwindigkeit pro Sekunde
   bounce: 0.6, // Energieerhalt beim Abprallen an der Bande
 }
+
+export const PLAYER = {
+  radius: 17,
+  speed: 260, // px pro Sekunde
+  sprint: 390,
+}
