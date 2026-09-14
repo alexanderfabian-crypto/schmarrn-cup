@@ -6,30 +6,46 @@
 // physisch A = Index 1, R = Index 5, Steuerkreuz = Index 12 bis 15.
 export const PAD_BUTTONS = { pass: 0, shoot: 1, sprint: 5, up: 12, down: 13, left: 14, right: 15 }
 
-// Tastatur für Tests ohne Pads: Pfeiltasten, X passen, C schießen, Shift sprinten.
-const KEYS = {
-  ArrowUp: 'up',
-  ArrowDown: 'down',
-  ArrowLeft: 'left',
-  ArrowRight: 'right',
-  KeyX: 'pass',
-  KeyC: 'shoot',
-  ShiftLeft: 'sprint',
-  ShiftRight: 'sprint',
-}
+// Tastatur für Tests ohne Pads. Spieler 1: Pfeiltasten, X passen, C schießen,
+// Shift sprinten. Spieler 2: WASD, Q passen, E schießen, Tab sprinten.
+const KEYS = [
+  {
+    ArrowUp: 'up',
+    ArrowDown: 'down',
+    ArrowLeft: 'left',
+    ArrowRight: 'right',
+    KeyX: 'pass',
+    KeyC: 'shoot',
+    ShiftLeft: 'sprint',
+    ShiftRight: 'sprint',
+  },
+  {
+    KeyW: 'up',
+    KeyS: 'down',
+    KeyA: 'left',
+    KeyD: 'right',
+    KeyQ: 'pass',
+    KeyE: 'shoot',
+    Tab: 'sprint',
+  },
+]
 
-const keyState = {}
+const keyState = [{}, {}]
 const prev = [{}, {}]
 
 if (typeof window !== 'undefined') {
   window.addEventListener('keydown', (e) => {
-    if (KEYS[e.code]) {
-      keyState[KEYS[e.code]] = true
-      e.preventDefault()
-    }
+    KEYS.forEach((map, i) => {
+      if (map[e.code]) {
+        keyState[i][map[e.code]] = true
+        e.preventDefault()
+      }
+    })
   })
   window.addEventListener('keyup', (e) => {
-    if (KEYS[e.code]) keyState[KEYS[e.code]] = false
+    KEYS.forEach((map, i) => {
+      if (map[e.code]) keyState[i][map[e.code]] = false
+    })
   })
 }
 
@@ -69,7 +85,7 @@ function toInput(raw) {
   return input
 }
 
-// Pad 1 steuert Spieler 0, Pad 2 Spieler 1. Die Tastatur ergänzt Spieler 0.
+// Pad 1 steuert Spieler 0, Pad 2 Spieler 1. Die Tastatur ergänzt beide.
 export function readInputs() {
   const pads = typeof navigator !== 'undefined' && navigator.getGamepads ? navigator.getGamepads() : []
   const connected = [...pads].filter(Boolean)
@@ -77,17 +93,17 @@ export function readInputs() {
     const pad = connected[i]
     const input = pad ? toInput(readPad(pad)) : emptyInput()
     input.connected = Boolean(pad)
+    const kb = toInput(keyState[i])
+    if (kb.active) {
+      input.dx = kb.dx || input.dx
+      input.dy = kb.dy || input.dy
+      input.pass ||= kb.pass
+      input.shoot ||= kb.shoot
+      input.sprint ||= kb.sprint
+      input.active = true
+    }
     return input
   })
-  const kb = toInput(keyState)
-  if (kb.active) {
-    inputs[0].dx = kb.dx || inputs[0].dx
-    inputs[0].dy = kb.dy || inputs[0].dy
-    inputs[0].pass ||= kb.pass
-    inputs[0].shoot ||= kb.shoot
-    inputs[0].sprint ||= kb.sprint
-    inputs[0].active = true
-  }
   inputs.forEach((input, i) => {
     input.passPressed = input.pass && !prev[i].pass
     input.shootPressed = input.shoot && !prev[i].shoot

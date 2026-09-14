@@ -76,17 +76,21 @@ export function step(state, dt) {
   state.time += dt
   state.inputs = readInputs()
 
-  // Etappe 1: nur Mannschaft 0 ist steuerbar.
-  pickControlled(state, 0)
-  const input = state.inputs[0]
-  const meIndex = state.controlled[0]
-  const me = state.players[meIndex]
-  movePlayer(me, input.dx, input.dy, input.sprint, dt)
+  // Jede Mannschaft hat einen gesteuerten Spieler, Pad 1 gelb, Pad 2 blau.
+  for (const team of [0, 1]) {
+    pickControlled(state, team)
+    const input = state.inputs[team]
+    const me = state.players[state.controlled[team]]
+    movePlayer(me, input.dx, input.dy, input.sprint, dt)
+  }
 
   updateOthers(state, dt)
   updatePossession(state, dt)
 
-  if (state.owner === meIndex) {
+  for (const team of [0, 1]) {
+    const input = state.inputs[team]
+    const meIndex = state.controlled[team]
+    if (state.owner !== meIndex) continue
     if (input.shootPressed) kick(state, meIndex, KICK.shot, KICK.shotSpread)
     else if (input.passPressed) kick(state, meIndex, KICK.pass)
   }
