@@ -8,3 +8,9 @@ export const PITCH = { x: 110, y: 100, w: 1700, h: 960 }
 export const GOAL = { width: 140, depth: 40 }
 
 export const STEP = 1 / 120 // fester Zeitschritt der Simulation in Sekunden
+
+export const BALL = {
+  radius: 7,
+  friction: 0.9, // exponentieller Abbau der Geschwindigkeit pro Sekunde
+  bounce: 0.6, // Energieerhalt beim Abprallen an der Bande
+}

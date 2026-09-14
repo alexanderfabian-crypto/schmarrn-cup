@@ -1,6 +1,7 @@
 import teams from '../../content/teams.json'
 import { PITCH } from './constants.js'
 import { FORMATION, KICKOFF, KICKOFF_WAIT } from './formation.js'
+import { createBall, moveBall } from './ball.js'
 
 // Mannschaft 0 (gelb) spielt von links nach rechts, Mannschaft 1 (blau) umgekehrt.
 export function createState() {
@@ -19,6 +20,7 @@ export function createState() {
   const state = {
     time: 0,
     players,
+    ball: createBall(),
     score: [0, 0],
   }
   resetKickoff(state, 0)
@@ -42,8 +44,10 @@ export function resetKickoff(state, kickoffTeam) {
     p.dirY = 0
     p.moving = false
   })
+  Object.assign(state.ball, createBall())
 }
 
 export function step(state, dt) {
   state.time += dt
+  moveBall(state.ball, dt)
 }
