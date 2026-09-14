@@ -1,0 +1,38 @@
+{
+  "teams": [
+    {
+      "id": "gelb",
+      "name": "Team Gelb",
+      "players": [
+        { "number": 1, "nickname": "Pfanne" },
+        { "number": 2, "nickname": "Butterflocke" },
+        { "number": 3, "nickname": "Rosine" },
+        { "number": 4, "nickname": "Zwetschge" },
+        { "number": 5, "nickname": "Apfelmus" },
+        { "number": 6, "nickname": "Eigelb" },
+        { "number": 7, "nickname": "Vanille" },
+        { "number": 8, "nickname": "Zimtstange" },
+        { "number": 9, "nickname": "Puderzucker" },
+        { "number": 10, "nickname": "Schmarrn" },
+        { "number": 11, "nickname": "Mandelsplitter" }
+      ]
+    },
+    {
+      "id": "blau",
+      "name": "Team Blau",
+      "players": [
+        { "number": 1, "nickname": "Topfdeckel" },
+        { "number": 2, "nickname": "Schneebesen" },
+        { "number": 3, "nickname": "Kelle" },
+        { "number": 4, "nickname": "Sieb" },
+        { "number": 5, "nickname": "Nudelholz" },
+        { "number": 6, "nickname": "Quirl" },
+        { "number": 7, "nickname": "Teigschaber" },
+        { "number": 8, "nickname": "Backblech" },
+        { "number": 9, "nickname": "Ofenrohr" },
+        { "number": 10, "nickname": "Löffel" },
+        { "number": 11, "nickname": "Reibe" }
+      ]
+    }
+  ]
+}
