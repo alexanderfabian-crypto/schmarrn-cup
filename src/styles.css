@@ -26,7 +26,7 @@ body,
   top: 50%;
   transform-origin: center center;
   overflow: hidden;
-  background: #2f8a3a;
+  background: #3a9a45;
 }
 
 .debug {
@@ -35,4 +35,37 @@ body,
   bottom: 6px;
   color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
+}
+
+.pitch {
+  background: repeating-linear-gradient(
+    90deg,
+    #3a9a45 0,
+    #3a9a45 100px,
+    #45a850 100px,
+    #45a850 200px
+  );
+}
+
+.line {
+  position: absolute;
+  border: 4px solid #fff;
+}
+
+.line.round {
+  border-radius: 50%;
+}
+
+.spot {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.goal {
+  position: absolute;
+  border: 4px solid #fff;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 8px, rgba(255, 255, 255, 0.35) 8px 10px),
+    repeating-linear-gradient(90deg, transparent 0 8px, rgba(255, 255, 255, 0.35) 8px 10px);
 }
