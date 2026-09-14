@@ -130,15 +130,100 @@ body,
   will-change: transform;
 }
 
-/* Vorläufiger Spielstand, die Anzeigetafel kommt in Etappe 2. */
-.score {
+/* Anzeigetafel im Streifen über dem Feld */
+.scoreboard {
   position: absolute;
-  top: 24px;
-  left: 0;
-  width: 100%;
-  text-align: center;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: 300px 200px 300px;
+  grid-template-rows: 46px 22px;
+  align-items: center;
   color: #fff;
-  font-size: 44px;
   font-weight: 800;
   text-shadow: 2px 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+.scoreboard .team {
+  font-size: 30px;
+  line-height: 46px;
+  padding: 0 16px;
+  border-radius: 8px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: none;
+}
+
+.scoreboard .team-0 {
+  background: #ffd51e;
+  color: #1b1b1b;
+}
+
+.scoreboard .team-1 {
+  background: #1f5fe0;
+}
+
+.scoreboard .result {
+  font-size: 46px;
+  line-height: 46px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.scoreboard .colon {
+  margin: 0 12px;
+  opacity: 0.8;
+}
+
+.scoreboard .half {
+  grid-column: 1;
+  font-size: 18px;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.scoreboard .clock {
+  grid-column: 3;
+  font-size: 22px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Einblendung in der Feldmitte */
+.banner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 28px 64px;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  text-align: center;
+  animation: banner-in 0.25s ease-out;
+}
+
+.banner-text {
+  font-size: 96px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 2px;
+}
+
+.banner-sub {
+  margin-top: 14px;
+  font-size: 28px;
+  font-weight: 600;
+  opacity: 0.85;
+  min-height: 34px;
+}
+
+@keyframes banner-in {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
 }
