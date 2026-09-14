@@ -4,6 +4,7 @@ import Player from './components/Player.jsx'
 import Ball from './components/Ball.jsx'
 import Scoreboard from './components/Scoreboard.jsx'
 import Banner from './components/Banner.jsx'
+import IdleHint from './components/IdleHint.jsx'
 import { useGame } from './game/useGame.js'
 import { padDebug } from './game/input.js'
 
@@ -20,6 +21,7 @@ export default function App() {
       <Ball ball={game.ball} />
       <Scoreboard game={game} />
       <Banner game={game} />
+      <IdleHint game={game} />
       <div className="debug">
         {game.time.toFixed(1)} s
         {DEBUG && padDebug().map((line) => <div key={line}>{line}</div>)}

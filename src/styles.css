@@ -227,3 +227,42 @@ body,
     opacity: 0;
   }
 }
+
+/* Hinweis, wenn ein Controller länger unberührt ist */
+.idle-hint {
+  position: absolute;
+  bottom: 40px;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  border: 3px solid #fff;
+  animation: idle-pulse 1s ease-in-out infinite alternate;
+}
+
+.idle-hint.side-left {
+  left: 130px;
+}
+
+.idle-hint.side-right {
+  right: 130px;
+}
+
+.idle-hint.team-0 {
+  border-color: #ffd51e;
+}
+
+.idle-hint.team-1 {
+  border-color: #5f8ff5;
+}
+
+@keyframes idle-pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}

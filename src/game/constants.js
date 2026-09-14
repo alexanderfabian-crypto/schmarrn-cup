@@ -36,3 +36,5 @@ export const MATCH = {
   celebration: 5, // Sekunden Jubel nach einem Tor
   clockRunsDuringCelebration: true, // Uhr läuft beim Jubel weiter, Gesamtdauer bleibt exakt
 }
+
+export const IDLE_HINT_AFTER = 3 // Sekunden ohne Eingabe, bis der Hinweis erscheint

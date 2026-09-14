@@ -8,6 +8,7 @@ import { updatePossession, kick } from './control.js'
 import { updateOthers } from './others.js'
 import { checkGoal } from './goal.js'
 import { createMatch, updateMatch, goalScored } from './match.js'
+import { updateIdle } from './idle.js'
 
 export function createState() {
   const players = teams.teams.flatMap((team, t) =>
@@ -40,6 +41,10 @@ export function createState() {
     kickCooldown: 0,
     lastGoal: null,
     inputs: [],
+    idle: [
+      { lastActive: 0, used: false, hint: false },
+      { lastActive: 0, used: false, hint: false },
+    ],
     resetKickoff,
   }
   resetKickoff(state, 0)
@@ -87,6 +92,7 @@ export function resetKickoff(state, kickoffTeam) {
 export function step(state, dt) {
   state.time += dt
   state.inputs = readInputs()
+  updateIdle(state)
 
   if (!updateMatch(state, dt)) return
 
