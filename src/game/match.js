@@ -74,11 +74,19 @@ function tickClock(state, dt) {
   }
 }
 
-export function goalScored(state, team) {
+// scorer ist der Spieler, der den Ball zuletzt getreten hat. Gehört er zur
+// anderen Mannschaft, war es ein Eigentor.
+export function goalScored(state, team, scorer) {
   const m = state.match
   state.score[team] += 1
   state.events.push({ type: 'goal', team })
-  state.lastGoal = { team, time: state.time }
+  const player = scorer >= 0 ? state.players[scorer] : null
+  state.lastGoal = {
+    team,
+    time: state.time,
+    scorer: player ? { number: player.number, name: player.name } : null,
+    ownGoal: Boolean(player) && player.team !== team,
+  }
   m.phase = 'goal'
   m.timer = MATCH.celebration
   m.kickoffTeam = 1 - team

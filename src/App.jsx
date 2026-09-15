@@ -17,7 +17,13 @@ export default function App() {
     <Stage>
       <Pitch />
       {game.players.map((p, i) => (
-        <Player key={i} player={p} controlled={game.controlled[p.team] === i} />
+        <Player
+          key={i}
+          index={i}
+          player={p}
+          controlled={game.controlled[p.team] === i}
+          celebrating={game.match.phase === 'goal' && game.lastGoal?.team === p.team}
+        />
       ))}
       <Ball ball={game.ball} />
       <Scoreboard game={game} />

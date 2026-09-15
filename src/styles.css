@@ -279,3 +279,62 @@ body,
   font-size: 20px;
   font-weight: 700;
 }
+
+/* Jubel: die treffende Mannschaft hüpft, bis der Wiederanstoß kommt. */
+.player.celebrating .number {
+  animation: hop 0.42s ease-in-out infinite alternate;
+  animation-delay: inherit;
+}
+
+.player.celebrating {
+  animation: shake 0.42s ease-in-out infinite alternate;
+  animation-delay: inherit;
+}
+
+@keyframes hop {
+  to {
+    transform: translateY(-4px) scale(1.15);
+  }
+}
+
+@keyframes shake {
+  to {
+    box-shadow: 4px 9px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Torjubel-Einblendung in Mannschaftsfarbe */
+.goal-banner {
+  /* Höher gesetzt, damit die jubelnden Spieler sichtbar bleiben. */
+  top: 34%;
+  padding: 20px 56px;
+  animation: goal-in 0.3s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+
+.goal-banner .banner-text {
+  font-size: 110px;
+  letter-spacing: 4px;
+}
+
+.goal-banner.team-0 {
+  background: rgba(255, 213, 30, 0.92);
+  color: #1b1b1b;
+}
+
+.goal-banner.team-1 {
+  background: rgba(31, 95, 224, 0.92);
+  color: #fff;
+}
+
+.goal-banner .banner-sub {
+  font-size: 34px;
+  font-weight: 800;
+  opacity: 1;
+}
+
+@keyframes goal-in {
+  from {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+}

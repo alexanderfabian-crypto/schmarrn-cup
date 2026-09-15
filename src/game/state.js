@@ -132,5 +132,5 @@ export function step(state, dt) {
 
   // Ball im rechten Tor zählt für die Mannschaft, die nach rechts spielt.
   const side = checkGoal(state.ball)
-  if (side !== 0) goalScored(state, state.attack[0] === side ? 0 : 1)
+  if (side !== 0) goalScored(state, state.attack[0] === side ? 0 : 1, state.lastKicker)
 }
