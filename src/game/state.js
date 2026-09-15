@@ -45,6 +45,7 @@ export function createState() {
     launch: 0,
     lastGoal: null,
     inputs: [],
+    events: [], // Tonereignisse, werden nach jedem Frame geleert
     humanActive: [false, false], // ob das Pad gerade wirklich benutzt wird
     idle: [
       { lastActive: 0, used: false, hint: false },
@@ -127,7 +128,7 @@ export function step(state, dt) {
     else if (input.passPressed) kick(state, meIndex, KICK.pass)
   }
 
-  moveBall(state.ball, dt)
+  moveBall(state.ball, dt, state.events)
 
   // Ball im rechten Tor zählt für die Mannschaft, die nach rechts spielt.
   const side = checkGoal(state.ball)

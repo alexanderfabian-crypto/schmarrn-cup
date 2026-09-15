@@ -266,3 +266,16 @@ body,
     transform: scale(1.05);
   }
 }
+
+/* Stummschaltung */
+.mute {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  padding: 8px 18px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+}

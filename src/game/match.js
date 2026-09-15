@@ -16,6 +16,7 @@ export function startMatch(state) {
   state.match.phase = 'play'
   state.attack = [1, -1]
   state.resetKickoff(state, 0)
+  state.events.push({ type: 'kickoff' })
 }
 
 // Zählt Uhr und Phasentimer hoch und schaltet Phasen um.
@@ -38,6 +39,7 @@ export function updateMatch(state, dt) {
       if (m.timer <= 0 && m.phase === 'goal') {
         m.phase = 'play'
         state.resetKickoff(state, m.kickoffTeam)
+        state.events.push({ type: 'kickoff' })
       }
       return false
 
@@ -49,6 +51,7 @@ export function updateMatch(state, dt) {
         m.clock = 0
         state.attack = [-1, 1]
         state.resetKickoff(state, 1)
+        state.events.push({ type: 'kickoff' })
       }
       return false
 
@@ -64,14 +67,17 @@ function tickClock(state, dt) {
   if (m.half === 1) {
     m.phase = 'halftime'
     m.timer = MATCH.halftimeBreak
+    state.events.push({ type: 'halftime' })
   } else {
     m.phase = 'fulltime'
+    state.events.push({ type: 'fulltime' })
   }
 }
 
 export function goalScored(state, team) {
   const m = state.match
   state.score[team] += 1
+  state.events.push({ type: 'goal', team })
   state.lastGoal = { team, time: state.time }
   m.phase = 'goal'
   m.timer = MATCH.celebration

@@ -5,13 +5,14 @@ import Ball from './components/Ball.jsx'
 import Scoreboard from './components/Scoreboard.jsx'
 import Banner from './components/Banner.jsx'
 import IdleHint from './components/IdleHint.jsx'
-import { useGame } from './game/useGame.js'
+import { useGame, useMute } from './game/useGame.js'
 import { padDebug } from './game/input.js'
 
 const DEBUG = typeof window !== 'undefined' && window.location.search.includes('debug')
 
 export default function App() {
   const game = useGame()
+  const muted = useMute()
   return (
     <Stage>
       <Pitch />
@@ -22,6 +23,7 @@ export default function App() {
       <Scoreboard game={game} />
       <Banner game={game} />
       <IdleHint game={game} />
+      {muted && <div className="mute">Ton aus (M)</div>}
       <div className="debug">
         {game.time.toFixed(1)} s
         {DEBUG && padDebug().map((line) => <div key={line}>{line}</div>)}

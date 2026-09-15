@@ -6,7 +6,7 @@ export function createBall() {
 
 // Rollt den Ball weiter und lässt ihn an Seiten- und Torlinie abprallen.
 // Zwischen den Pfosten rollt er durch, das Tor selbst hat eine feste Rückwand.
-export function moveBall(ball, dt) {
+export function moveBall(ball, dt, events) {
   ball.x += ball.vx * dt
   ball.y += ball.vy * dt
   const decay = Math.exp(-BALL.friction * dt)
@@ -21,11 +21,12 @@ export function moveBall(ball, dt) {
   const goalBottom = goalTop + GOAL.width
   const inGoalMouth = ball.y > goalTop + r && ball.y < goalBottom - r
 
-  if (ball.y < top) (ball.y = top), (ball.vy = -ball.vy * BALL.bounce)
-  if (ball.y > bottom) (ball.y = bottom), (ball.vy = -ball.vy * BALL.bounce)
+  const bounced = (v) => events && events.push({ type: 'touch', strength: Math.min(Math.abs(v) / 900, 1) * 0.6 })
+  if (ball.y < top) (ball.y = top), bounced(ball.vy), (ball.vy = -ball.vy * BALL.bounce)
+  if (ball.y > bottom) (ball.y = bottom), bounced(ball.vy), (ball.vy = -ball.vy * BALL.bounce)
 
   const left = inGoalMouth ? PITCH.x - GOAL.depth + r : PITCH.x + r
   const right = inGoalMouth ? PITCH.x + PITCH.w + GOAL.depth - r : PITCH.x + PITCH.w - r
-  if (ball.x < left) (ball.x = left), (ball.vx = -ball.vx * BALL.bounce)
-  if (ball.x > right) (ball.x = right), (ball.vx = -ball.vx * BALL.bounce)
+  if (ball.x < left) (ball.x = left), bounced(ball.vx), (ball.vx = -ball.vx * BALL.bounce)
+  if (ball.x > right) (ball.x = right), bounced(ball.vx), (ball.vx = -ball.vx * BALL.bounce)
 }

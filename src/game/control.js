@@ -50,6 +50,8 @@ export function updatePossession(state, dt) {
     if (best >= 0) {
       owner = best
       state.protection = AI.protection
+      const speed = Math.hypot(ball.vx, ball.vy)
+      if (speed > 60) state.events.push({ type: 'touch', strength: speed / KICK.shot })
     }
   }
   state.owner = owner
@@ -68,6 +70,7 @@ export function kick(state, playerIndex, speed, spread = 0) {
   const angle = Math.atan2(p.dirY, p.dirX) + (Math.random() * 2 - 1) * spread
   state.ball.vx = Math.cos(angle) * speed
   state.ball.vy = Math.sin(angle) * speed
+  state.events.push({ type: 'touch', strength: speed / KICK.shot })
   state.owner = -1
   state.lastKicker = playerIndex
   state.kickCooldown = KICK.cooldown
