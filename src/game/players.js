@@ -17,8 +17,8 @@ export function movePlayer(p, dx, dy, sprint, dt, maxSpeed) {
   p.dirY = ny
   p.moving = true
 
-  // Spieler bleiben knapp innerhalb des Feldes plus Torraum dahinter.
-  const m = 30
+  // Spieler bleiben knapp innerhalb des Feldes.
+  const m = 12
   p.x = Math.min(Math.max(p.x, PITCH.x - m), PITCH.x + PITCH.w + m)
   p.y = Math.min(Math.max(p.y, PITCH.y - m), PITCH.y + PITCH.h + m)
 }

@@ -23,11 +23,17 @@ export const PLAYER = {
 
 export const KICK = {
   controlRadius: 26, // Abstand, ab dem ein Spieler den Ball übernimmt
+  keeperRadius: 34, // Torhüter haben Hände
   carry: 20, // Abstand des Balls vor dem Spieler beim Dribbeln
   pass: 750, // Ballgeschwindigkeit in px/s
   shot: 1350,
   shotSpread: 0.05, // Streuung des Schusses in Radiant
   cooldown: 0.3, // Sekunden, in denen der Schütze den Ball nicht zurückholt
+  launch: 0.1, // Sekunden nach dem Kick, in denen niemand den Ball annimmt
+  trapSpeed: 500, // ab dieser Geschwindigkeit wird die Annahme unsicher
+  trapMinChance: 0.2, // Annahmechance je Schritt bei vollem Schuss
+  tackleChance: 0.5, // Erfolgsquote eines Zweikampfs
+  tackleRetry: 0.6, // Sekunden Pause nach einem verlorenen Zweikampf
 }
 
 export const MATCH = {
@@ -38,3 +44,17 @@ export const MATCH = {
 }
 
 export const IDLE_HINT_AFTER = 3 // Sekunden ohne Eingabe, bis der Hinweis erscheint
+
+export const AI = {
+  holdTime: 0.35, // Sekunden, die ein KI-Spieler den Ball hält, bevor er entscheidet
+  shootDistance: 430, // Abstand zum Tor, ab dem geschossen wird
+  shotSpread: 0.09, // Streuung der KI-Schüsse in Radiant
+  minShotDepth: 130, // Mindestabstand zur Torlinie für einen Schuss
+  pressDistance: 60, // Abstand, den der zweite Presser zum Ball hält
+  laneWidth: 45, // Gegner näher als das an der Passbahn blockieren den Pass
+  passMin: 120,
+  passMax: 650,
+  drift: 0.35, // wie stark die Grundpositionen mit dem Ball mitwandern
+  protection: 0.4, // Sekunden nach Ballgewinn, in denen kein Gegner den Ball nimmt
+  takeoverAfter: 1, // Sekunden ohne Eingabe, bis die KI den gesteuerten Spieler mitführt
+}

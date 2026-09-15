@@ -1,11 +1,11 @@
 import teams from '../../content/teams.json'
-import { PITCH, KICK } from './constants.js'
+import { PITCH, KICK, AI } from './constants.js'
 import { FORMATION, KICKOFF, KICKOFF_WAIT } from './formation.js'
 import { createBall, moveBall } from './ball.js'
 import { readInputs } from './input.js'
 import { movePlayer, pickControlled } from './players.js'
 import { updatePossession, kick } from './control.js'
-import { updateOthers } from './others.js'
+import { updateAI } from './ai.js'
 import { checkGoal } from './goal.js'
 import { createMatch, updateMatch, goalScored } from './match.js'
 import { updateIdle } from './idle.js'
@@ -24,6 +24,8 @@ export function createState() {
       homeX: 0,
       homeY: 0,
       hold: 0,
+      tackleUntil: 0,
+      dribbleTarget: null,
     })),
   )
   const state = {
@@ -39,8 +41,11 @@ export function createState() {
     owner: -1, // Spieler, der den Ball führt
     lastKicker: -1,
     kickCooldown: 0,
+    protection: 0,
+    launch: 0,
     lastGoal: null,
     inputs: [],
+    humanActive: [false, false], // ob das Pad gerade wirklich benutzt wird
     idle: [
       { lastActive: 0, used: false, hint: false },
       { lastActive: 0, used: false, hint: false },
@@ -86,6 +91,8 @@ export function resetKickoff(state, kickoffTeam) {
   state.owner = -1
   state.lastKicker = -1
   state.kickCooldown = 0
+  state.protection = 0
+  state.launch = 0
   state.controlled = [-1, -1]
 }
 
@@ -97,20 +104,25 @@ export function step(state, dt) {
   if (!updateMatch(state, dt)) return
 
   // Jede Mannschaft hat einen gesteuerten Spieler, Pad 1 gelb, Pad 2 blau.
+  // Ruht das Pad länger, führt die KI auch diesen Spieler mit, damit das
+  // Spiel weiterläuft. Die nächste Eingabe holt ihn sofort zurück.
   for (const team of [0, 1]) {
     pickControlled(state, team)
+    const slot = state.idle[team]
+    state.humanActive[team] = slot.used && state.time - slot.lastActive < AI.takeoverAfter
+    if (!state.humanActive[team]) continue
     const input = state.inputs[team]
     const me = state.players[state.controlled[team]]
     movePlayer(me, input.dx, input.dy, input.sprint, dt)
   }
 
-  updateOthers(state, dt)
+  updateAI(state, dt)
   updatePossession(state, dt)
 
   for (const team of [0, 1]) {
     const input = state.inputs[team]
     const meIndex = state.controlled[team]
-    if (state.owner !== meIndex) continue
+    if (!state.humanActive[team] || state.owner !== meIndex) continue
     if (input.shootPressed) kick(state, meIndex, KICK.shot, KICK.shotSpread)
     else if (input.passPressed) kick(state, meIndex, KICK.pass)
   }
