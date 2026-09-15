@@ -193,14 +193,14 @@ body,
 
 .scoreboard .half {
   grid-column: 1;
-  font-size: 18px;
+  font-size: 20px;
   text-align: center;
   opacity: 0.9;
 }
 
 .scoreboard .clock {
   grid-column: 3;
-  font-size: 22px;
+  font-size: 28px;
   text-align: center;
   font-variant-numeric: tabular-nums;
 }

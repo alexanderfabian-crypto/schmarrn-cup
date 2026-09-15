@@ -1,5 +1,12 @@
 import teams from '../../content/teams.json'
 
+// Endstand in Worten, für die Einblendung nach dem Abpfiff.
+function winnerLine([a, b]) {
+  if (a === b) return `Unentschieden ${a}:${b}`
+  const winner = a > b ? 0 : 1
+  return `${teams.teams[winner].name} gewinnt ${Math.max(a, b)}:${Math.min(a, b)}`
+}
+
 // Große Einblendung in der Feldmitte für Phasen ohne laufendes Spiel.
 export default function Banner({ game }) {
   const m = game.match
@@ -23,7 +30,7 @@ export default function Banner({ game }) {
   let sub = ''
   if (m.phase === 'ready') (text = 'Start drücken'), (sub = 'Enter oder Start-Taste')
   if (m.phase === 'halftime') (text = `Halbzeit · ${Math.ceil(m.timer)}`), (sub = 'Seitenwechsel')
-  if (m.phase === 'fulltime') (text = 'Abpfiff'), (sub = 'Neues Spiel mit Start')
+  if (m.phase === 'fulltime') (text = 'Abpfiff'), (sub = winnerLine(game.score))
   if (!text) return null
   return (
     <div className={`banner phase-${m.phase}`} key={m.phase}>
