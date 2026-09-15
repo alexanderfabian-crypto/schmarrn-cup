@@ -30,11 +30,15 @@ export default function App() {
       <Banner game={game} />
       <IdleHint game={game} />
       {muted && <div className="mute">Ton aus (M)</div>}
-      <div className="debug">
-        {game.time.toFixed(1)} s
-        {DEBUG && padDebug().map((line) => <div key={line}>{line}</div>)}
-        {DEBUG && padDebug().length === 0 && <div>Kein Gamepad erkannt</div>}
-      </div>
+      {DEBUG && (
+        <div className="debug">
+          {game.time.toFixed(1)} s
+          {padDebug().map((line) => (
+            <div key={line}>{line}</div>
+          ))}
+          {padDebug().length === 0 && <div>Kein Gamepad erkannt</div>}
+        </div>
+      )}
     </Stage>
   )
 }

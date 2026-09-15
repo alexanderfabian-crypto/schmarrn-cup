@@ -74,6 +74,7 @@ body,
   position: absolute;
   left: 0;
   top: 0;
+  z-index: 2;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -94,11 +95,12 @@ body,
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 8px;
-  height: 8px;
-  margin: -4px 0 0 -4px;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.75);
+  border: 2px solid rgba(255, 255, 255, 0.55);
 }
 
 .player.team-0 {
@@ -123,16 +125,27 @@ body,
   position: absolute;
   left: 0;
   top: 0;
+  z-index: 3;
   border-radius: 50%;
   background: #fff;
   border: 2px solid #333;
-  box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.3);
+  will-change: transform;
+}
+
+.ball-shadow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
   will-change: transform;
 }
 
 /* Anzeigetafel im Streifen über dem Feld */
 .scoreboard {
   position: absolute;
+  z-index: 5;
   top: 18px;
   left: 50%;
   transform: translateX(-50%);
@@ -195,6 +208,7 @@ body,
 /* Einblendung in der Feldmitte */
 .banner {
   position: absolute;
+  z-index: 6;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -231,6 +245,7 @@ body,
 /* Hinweis, wenn ein Controller länger unberührt ist */
 .idle-hint {
   position: absolute;
+  z-index: 5;
   bottom: 40px;
   padding: 14px 28px;
   border-radius: 14px;
